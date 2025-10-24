@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.push({ text: second, matchesWith: first, type: 'second' });
     }
 
-    let selectedCards = []; // Карточки, выбранные для проверки (максимум 2)
+    let selectedCards = []; // Карточки, выбранные для проверки
     let matchedPairs = 0;
     let canFlip = true;
 
@@ -67,16 +67,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!canFlip) return;
         if (this.classList.contains('matched')) return;
         
+        // Если карточка еще не перевернута - переворачиваем
+        if (!this.classList.contains('flipped')) {
+            this.classList.add('flipped');
+        }
+        
         // Если карточка уже выбрана - отменяем выбор
-        if (this.classList.contains('selected')) {
+        if (selectedCards.includes(this)) {
             this.classList.remove('selected');
             selectedCards = selectedCards.filter(card => card !== this);
             return;
         }
         
-        // Если карточка не перевернута - переворачиваем ее
-        if (!this.classList.contains('flipped')) {
-            this.classList.add('flipped');
+        // Если уже выбрано 2 карточки - очищаем выбор
+        if (selectedCards.length >= 2) {
+            selectedCards.forEach(card => card.classList.remove('selected'));
+            selectedCards = [];
         }
         
         // Добавляем карточку в выбранные
@@ -117,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Сообщение о найденной паре
         showMessage('Верно!', `Вы нашли пару: ${card1.dataset.text} - ${card2.dataset.text}`);
         
-        // Снимаем выделение с совпавших карточек
+        // Снимаем выделение
         card1.classList.remove('selected');
         card2.classList.remove('selected');
         selectedCards = [];
