@@ -184,3 +184,13 @@ p {
         font-size: 2em;
     }
 }
+/* Стили для разных типов карточек */
+.card-back.animal {
+    background: linear-gradient(45deg, #e74c3c, #e67e22);
+    color: white;
+}
+
+.card-back.place {
+    background: linear-gradient(45deg, #3498db, #2ecc71);
+    color: white;
+}
