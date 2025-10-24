@@ -7,54 +7,21 @@
 body {
     font-family: 'Arial', sans-serif;
     background: 
-        /* Основной градиент песка */
-        linear-gradient(135deg, #8b4513 0%, #a0522d 100%),
-        /* Текстура песка */
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            rgba(244, 208, 63, 0.1) 10px,
-            rgba(244, 208, 63, 0.1) 20px
-        ),
-        /* Египетские узоры */
-        radial-gradient(circle at 20% 80%, rgba(205, 133, 63, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(210, 105, 30, 0.3) 0%, transparent 50%);
-    background-blend-mode: multiply, overlay, normal;
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('https://images.unsplash.com/photo-1539650116574-75c0c6d73f7c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     color: #f4d03f;
     min-height: 100vh;
     padding: 20px;
-    position: relative;
-}
-
-/* Добавляем стилизованные пирамиды через псевдоэлементы */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        /* Пирамида слева */
-        linear-gradient(135deg, transparent 50%, rgba(139, 69, 19, 0.3) 50%),
-        linear-gradient(225deg, transparent 50%, rgba(160, 82, 45, 0.3) 50%),
-        /* Пирамида справа */
-        linear-gradient(135deg, transparent 50%, rgba(160, 82, 45, 0.2) 50%) 80% 20%,
-        linear-gradient(225deg, transparent 50%, rgba(139, 69, 19, 0.2) 50%) 80% 20%;
-    background-size: 200px 200px, 200px 200px, 150px 150px, 150px 150px;
-    background-repeat: no-repeat;
-    background-position: 10% 70%, 10% 70%, 85% 60%, 85% 60%;
-    pointer-events: none;
-    z-index: -1;
 }
 
 .container {
     max-width: 800px;
     margin: 0 auto;
     text-align: center;
-    position: relative;
-    z-index: 1;
 }
 
 h1 {
@@ -62,19 +29,12 @@ h1 {
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     color: #f4d03f;
-    background: linear-gradient(45deg, #8b4513, #a0522d);
-    padding: 15px 30px;
-    border-radius: 10px;
-    display: inline-block;
-    border: 2px solid #f4d03f;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 p {
     font-size: 1.2em;
     margin-bottom: 20px;
     color: #f8f8f8;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .game-stats {
@@ -83,12 +43,11 @@ p {
 
 .attempts {
     font-size: 1.3em;
-    background: rgba(139, 69, 19, 0.9);
+    background: rgba(139, 69, 19, 0.8);
     padding: 10px 20px;
     border-radius: 10px;
     display: inline-block;
     border: 2px solid #f4d03f;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .game-board {
@@ -99,11 +58,6 @@ p {
     max-width: 600px;
     margin: 0 auto;
     perspective: 1000px;
-    background: rgba(139, 69, 19, 0.3);
-    padding: 20px;
-    border-radius: 15px;
-    border: 2px solid #f4d03f;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 .card {
@@ -136,23 +90,13 @@ p {
     justify-content: center;
     border: 3px solid #8b4513;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-    transition: all 0.3s ease;
 }
 
 .card-front {
     background: linear-gradient(45deg, #8b4513, #a0522d);
-    background-image: 
-        /* Египетский узор на рубашке */
-        radial-gradient(circle at 30% 30%, rgba(244, 208, 63, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 70% 70%, rgba(244, 208, 63, 0.3) 0%, transparent 50%);
-    position: relative;
-}
-
-.card-front::before {
-    content: '𓂀';
-    font-size: 2em;
-    color: rgba(244, 208, 63, 0.6);
-    position: absolute;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M50 20L60 40L80 45L65 60L70 80L50 70L30 80L35 60L20 45L40 40Z" fill="%23f4d03f"/></svg>');
+    background-size: 40px 40px;
+    background-position: center;
 }
 
 .card-back {
@@ -172,7 +116,7 @@ p {
 
 /* Стиль для выбранных карточек */
 .card.selected .card-back {
-    box-shadow: 0 0 0 3px #ff0000, 0 0 20px rgba(255, 0, 0, 0.7);
+    box-shadow: 0 0 0 3px #ff0000, 0 0 15px rgba(255, 0, 0, 0.7);
     transform: rotateY(180deg) scale(0.95);
 }
 
@@ -210,17 +154,6 @@ p {
     text-align: center;
     color: #f8f8f8;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
-    position: relative;
-    overflow: hidden;
-}
-
-.modal-content::before {
-    content: '𓆣𓋹𓃒';
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1.5em;
-    opacity: 0.3;
 }
 
 .win-modal .modal-content {
@@ -250,15 +183,12 @@ p {
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s;
 }
 
 #modal-close:hover,
 #win-close:hover {
     background: #f7dc6f;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* Адаптивность */
@@ -267,7 +197,6 @@ p {
         grid-template-columns: repeat(4, 1fr);
         gap: 10px;
         max-width: 400px;
-        padding: 15px;
     }
     
     .card {
@@ -281,10 +210,13 @@ p {
     
     h1 {
         font-size: 2em;
-        padding: 10px 20px;
     }
     
-    body::before {
-        background-size: 120px 120px, 120px 120px, 80px 80px, 80px 80px;
+    body {
+        background: 
+            linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+            url('https://images.unsplash.com/photo-1539650116574-75c0c6d73f7c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80');
+        background-size: cover;
+        background-position: center;
     }
 }
