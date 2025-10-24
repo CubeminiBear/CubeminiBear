@@ -193,6 +193,12 @@ p {
         font-size: 2em;
     }
 }
+/* Стиль для выбранных карточек */
+.card.selected .card-back {
+    box-shadow: 0 0 0 3px #ff0000, 0 0 20px rgba(255, 0, 0, 0.5);
+    transform: rotateY(180deg) scale(0.95);
+}
+
 /* Стили для разных типов карточек */
 .card-back.first {
     background: linear-gradient(45deg, #e74c3c, #e67e22);
