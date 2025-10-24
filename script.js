@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.push({ text: second, matchesWith: first, type: 'second' });
     }
 
-    let activeCards = []; // Только карточки, ожидающие проверки (максимум 2)
+    let selectedCards = []; // Карточки, выбранные для проверки (максимум 2)
     let matchedPairs = 0;
     let canFlip = true;
 
@@ -57,24 +57,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="card-back ${cardData.type}">${cardData.text}</div>
             `;
             
-            card.addEventListener('click', flipCard);
+            card.addEventListener('click', handleCardClick);
             gameBoard.appendChild(card);
         });
     }
 
-    // Переворот карточки
-    function flipCard() {
-        // Проверяем, можно ли переворачивать
+    // Обработка клика по карточке
+    function handleCardClick() {
         if (!canFlip) return;
-        if (this.classList.contains('flipped') || this.classList.contains('matched')) return;
-        if (activeCards.length >= 2) return;
+        if (this.classList.contains('matched')) return;
+        
+        // Если карточка уже выбрана - отменяем выбор
+        if (this.classList.contains('selected')) {
+            this.classList.remove('selected');
+            selectedCards = selectedCards.filter(card => card !== this);
+            return;
+        }
+        
+        // Если карточка не перевернута - переворачиваем ее
+        if (!this.classList.contains('flipped')) {
+            this.classList.add('flipped');
+        }
+        
+        // Добавляем карточку в выбранные
+        this.classList.add('selected');
+        selectedCards.push(this);
 
-        // Переворачиваем карточку
-        this.classList.add('flipped');
-        activeCards.push(this);
-
-        // Если перевернули 2 карточки - проверяем совпадение
-        if (activeCards.length === 2) {
+        // Если выбрано 2 карточки - проверяем совпадение
+        if (selectedCards.length === 2) {
             canFlip = false;
             setTimeout(checkMatch, 600);
         }
@@ -82,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Проверка совпадения
     function checkMatch() {
-        const [card1, card2] = activeCards;
+        const [card1, card2] = selectedCards;
         
         // Проверяем, соответствуют ли карточки друг другу
         const isMatch = 
@@ -107,8 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Сообщение о найденной паре
         showMessage('Верно!', `Вы нашли пару: ${card1.dataset.text} - ${card2.dataset.text}`);
         
-        // ОЧИЩАЕМ активные карточки
-        activeCards = [];
+        // Снимаем выделение с совпавших карточек
+        card1.classList.remove('selected');
+        card2.classList.remove('selected');
+        selectedCards = [];
         canFlip = true;
 
         // Проверка победы
@@ -121,8 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleMismatch(card1, card2) {
         showMessage('Попробуй снова', `"${card1.dataset.text}" и "${card2.dataset.text}" не являются парой`);
         
-        // ОЧИЩАЕМ активные карточки, но оставляем их перевернутыми
-        activeCards = [];
+        // Снимаем выделение, но оставляем карточки перевернутыми
+        card1.classList.remove('selected');
+        card2.classList.remove('selected');
+        selectedCards = [];
         canFlip = true;
     }
 
@@ -164,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetGame() {
         matchedPairs = 0;
         pairsFoundElement.textContent = '0';
-        activeCards = [];
+        selectedCards = [];
         canFlip = true;
         createGameBoard();
     }
