@@ -8,14 +8,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalClose = document.getElementById('modal-close');
     const winClose = document.getElementById('win-close');
 
-    // Египетские символы (эмодзи для простоты)
-    const egyptianSymbols = [
-        '𓂀', '𓆣', '𓋹', '𓃒',
-        '𓊹', '𓍶', '𓁛', '𓆄'
-    ];
+    // ЗДЕСЬ ЗАДАЙТЕ ВАШИ ПАРЫ СОПОСТАВЛЕНИЙ
+    // Формат: { текст_на_карточке: с_чем_сопоставляется }
+    const cardPairs = {
+        'медведь': 'лес',
+        'рыба': 'вода', 
+        'верблюд': 'пустыня',
+        'птица': 'небо',
+        'крот': 'земля',
+        'дельфин': 'море',
+        'обезьяна': 'джунгли',
+        'песец': 'тундра'
+    };
 
-    // Создаем пары карточек
-    let cards = [...egyptianSymbols, ...egyptianSymbols];
+    // Создаем массив всех карточек (и животные, и места)
+    let cards = [];
+    for (const [animal, place] of Object.entries(cardPairs)) {
+        cards.push({ text: animal, matchesWith: place, type: 'animal' });
+        cards.push({ text: place, matchesWith: animal, type: 'place' });
+    }
+
     let flippedCards = [];
     let matchedPairs = 0;
     let canFlip = true;
@@ -33,15 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
         gameBoard.innerHTML = '';
         shuffleCards();
         
-        cards.forEach((symbol, index) => {
+        cards.forEach((cardData, index) => {
             const card = document.createElement('div');
             card.className = 'card';
-            card.dataset.symbol = symbol;
+            card.dataset.text = cardData.text;
+            card.dataset.matchesWith = cardData.matchesWith;
+            card.dataset.type = cardData.type;
             card.dataset.index = index;
             
             card.innerHTML = `
                 <div class="card-front"></div>
-                <div class="card-back">${symbol}</div>
+                <div class="card-back ${cardData.type}">${cardData.text}</div>
             `;
             
             card.addEventListener('click', flipCard);
@@ -64,10 +78,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Проверка совпадения
+    // Проверка совпадения по вашим правилам
     function checkMatch() {
         const [card1, card2] = flippedCards;
-        const isMatch = card1.dataset.symbol === card2.dataset.symbol;
+        
+        // Проверяем, соответствуют ли карточки друг другу по нашим правилам
+        const isMatch = 
+            (card1.dataset.matchesWith === card2.dataset.text && 
+             card2.dataset.matchesWith === card1.dataset.text) ||
+            (card1.dataset.text === card2.dataset.matchesWith && 
+             card2.dataset.text === card1.dataset.matchesWith);
 
         if (isMatch) {
             handleMatch(card1, card2);
@@ -84,27 +104,32 @@ document.addEventListener('DOMContentLoaded', () => {
         matchedPairs++;
         pairsFoundElement.textContent = matchedPairs;
         
-        showMessage('Верно!', 'Вы нашли парные символы!');
+        // Красивое сообщение о найденной паре
+        let pairDescription = '';
+        if (card1.dataset.type === 'animal') {
+            pairDescription = `${card1.dataset.text} → ${card2.dataset.text}`;
+        } else {
+            pairDescription = `${card2.dataset.text} → ${card1.dataset.text}`;
+        }
+        
+        showMessage('Верно!', `Вы нашли пару: ${pairDescription}`);
         
         flippedCards = [];
         canFlip = true;
 
         // Проверка победы
-        if (matchedPairs === egyptianSymbols.length) {
+        if (matchedPairs === Object.keys(cardPairs).length) {
             setTimeout(showWinMessage, 800);
         }
     }
 
     // Обработка несовпадения
     function handleMismatch(card1, card2) {
-        showMessage('Попробуй снова', 'Ищи внимательнее!');
+        showMessage('Попробуй снова', `"${card1.dataset.text}" и "${card2.dataset.text}" не являются парой`);
         
-        setTimeout(() => {
-            card1.classList.remove('flipped');
-            card2.classList.remove('flipped');
-            flippedCards = [];
-            canFlip = true;
-        }, 1000);
+        // Карточки остаются перевернутыми! Не закрываем их обратно
+        flippedCards = [];
+        canFlip = true;
     }
 
     // Показать сообщение
