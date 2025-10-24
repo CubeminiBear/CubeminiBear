@@ -8,7 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     background: 
         linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-        url('background.png');  /* ← ДОБАВИЛ ТОЛЬКО ЭТУ СТРОКУ */
+        url('background.jpg');  /* ← ДОБАВИЛ ТОЛЬКО ЭТУ СТРОКУ */
     background-size: cover;     /* ← И ЭТИ 3 СВОЙСТВА ДЛЯ ФОНА */
     background-position: center;
     background-attachment: fixed;
