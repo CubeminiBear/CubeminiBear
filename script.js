@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const winClose = document.getElementById('win-close');
 
     // ЗДЕСЬ ЗАДАЙТЕ ВАШИ ПАРЫ СОПОСТАВЛЕНИЙ
-    // Формат: { текст_на_карточке: с_чем_сопоставляется }
     const cardPairs = {
         'медведь': 'лес',
         'рыба': 'вода', 
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.push({ text: place, matchesWith: animal, type: 'place' });
     }
 
-    let flippedCards = [];
+    let activeCards = []; // Карточки, ожидающие проверки (максимум 2)
     let matchedPairs = 0;
     let canFlip = true;
 
@@ -65,14 +64,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Переворот карточки
     function flipCard() {
+        // Проверяем, можно ли переворачивать
         if (!canFlip) return;
         if (this.classList.contains('flipped') || this.classList.contains('matched')) return;
-        if (flippedCards.length >= 2) return;
+        if (activeCards.length >= 2) return;
 
+        // Переворачиваем карточку
         this.classList.add('flipped');
-        flippedCards.push(this);
+        activeCards.push(this);
 
-        if (flippedCards.length === 2) {
+        // Если перевернули 2 карточки - проверяем совпадение
+        if (activeCards.length === 2) {
             canFlip = false;
             setTimeout(checkMatch, 600);
         }
@@ -80,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Проверка совпадения по вашим правилам
     function checkMatch() {
-        const [card1, card2] = flippedCards;
+        const [card1, card2] = activeCards;
         
         // Проверяем, соответствуют ли карточки друг другу по нашим правилам
         const isMatch = 
@@ -114,7 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         showMessage('Верно!', `Вы нашли пару: ${pairDescription}`);
         
-        flippedCards = [];
+        // ОЧИЩАЕМ активные карточки после совпадения
+        activeCards = [];
         canFlip = true;
 
         // Проверка победы
@@ -127,9 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleMismatch(card1, card2) {
         showMessage('Попробуй снова', `"${card1.dataset.text}" и "${card2.dataset.text}" не являются парой`);
         
-        // Карточки остаются перевернутыми! Не закрываем их обратно
-        flippedCards = [];
+        // ВАЖНО: Очищаем активные карточки, но оставляем их перевернутыми
+        activeCards = [];
         canFlip = true;
+        
+        // Карточки остаются перевернутыми (видимыми), но больше не мешают новым кликам
     }
 
     // Показать сообщение
@@ -139,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageModal.style.display = 'block';
     }
 
-    // Показать сообщение о победе
+    // Показать сообщение о победы
     function showWinMessage() {
         winModal.style.display = 'block';
     }
@@ -170,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetGame() {
         matchedPairs = 0;
         pairsFoundElement.textContent = '0';
-        flippedCards = [];
+        activeCards = [];
         canFlip = true;
         createGameBoard();
     }
