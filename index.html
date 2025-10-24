@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Египетская Memory</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Египетские Тайны</h1>
+        <p>Найди все парные символы Древнего Египта!</p>
+        
+        <div class="game-stats">
+            <div class="attempts">Найдено пар: <span id="pairs-found">0</span>/8</div>
+        </div>
+        
+        <div class="game-board" id="game-board"></div>
+    </div>
+
+    <!-- Модальное окно для сообщений -->
+    <div id="message-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title"></h2>
+            <p id="modal-message"></p>
+            <button id="modal-close">OK</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно для победы -->
+    <div id="win-modal" class="modal win-modal">
+        <div class="modal-content">
+            <h2>Поздравляем!</h2>
+            <p>Вы разгадали все тайны Египта!</p>
+            <button id="win-close">Играть снова</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
