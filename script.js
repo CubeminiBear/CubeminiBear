@@ -8,26 +8,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalClose = document.getElementById('modal-close');
     const winClose = document.getElementById('win-close');
 
-    // ЗДЕСЬ ЗАДАЙТЕ ВАШИ ПАРЫ СОПОСТАВЛЕНИЙ
+    // ВАШИ ПАРЫ - МОЖЕТЕ МЕНЯТЬ!
     const cardPairs = {
-        'медведь': 'лес',
-        'рыба': 'вода', 
-        'верблюд': 'пустыня',
-        'птица': 'небо',
-        'крот': 'земля',
-        'дельфин': 'море',
-        'обезьяна': 'джунгли',
-        'песец': 'тундра'
+        'Зима': 'Снег',
+        'Лето': 'Солнце', 
+        'Весна': 'Цветы',
+        'Осень': 'Листья',
+        'Дождь': 'Зонт',
+        'Мороз': 'Варежки',
+        'Жара': 'Вентилятор',
+        'Ветер': 'Воздушный змей'
     };
 
-    // Создаем массив всех карточек (и животные, и места)
+    // Создаем массив всех карточек
     let cards = [];
-    for (const [animal, place] of Object.entries(cardPairs)) {
-        cards.push({ text: animal, matchesWith: place, type: 'animal' });
-        cards.push({ text: place, matchesWith: animal, type: 'place' });
+    for (const [first, second] of Object.entries(cardPairs)) {
+        cards.push({ text: first, matchesWith: second, type: 'first' });
+        cards.push({ text: second, matchesWith: first, type: 'second' });
     }
 
-    let activeCards = []; // Карточки, ожидающие проверки (максимум 2)
+    let activeCards = []; // Только карточки, ожидающие проверки (максимум 2)
     let matchedPairs = 0;
     let canFlip = true;
 
@@ -80,16 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Проверка совпадения по вашим правилам
+    // Проверка совпадения
     function checkMatch() {
         const [card1, card2] = activeCards;
         
-        // Проверяем, соответствуют ли карточки друг другу по нашим правилам
+        // Проверяем, соответствуют ли карточки друг другу
         const isMatch = 
-            (card1.dataset.matchesWith === card2.dataset.text && 
-             card2.dataset.matchesWith === card1.dataset.text) ||
-            (card1.dataset.text === card2.dataset.matchesWith && 
-             card2.dataset.text === card1.dataset.matchesWith);
+            (card1.dataset.matchesWith === card2.dataset.text) || 
+            (card2.dataset.matchesWith === card1.dataset.text);
 
         if (isMatch) {
             handleMatch(card1, card2);
@@ -106,17 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
         matchedPairs++;
         pairsFoundElement.textContent = matchedPairs;
         
-        // Красивое сообщение о найденной паре
-        let pairDescription = '';
-        if (card1.dataset.type === 'animal') {
-            pairDescription = `${card1.dataset.text} → ${card2.dataset.text}`;
-        } else {
-            pairDescription = `${card2.dataset.text} → ${card1.dataset.text}`;
-        }
+        // Сообщение о найденной паре
+        showMessage('Верно!', `Вы нашли пару: ${card1.dataset.text} - ${card2.dataset.text}`);
         
-        showMessage('Верно!', `Вы нашли пару: ${pairDescription}`);
-        
-        // ОЧИЩАЕМ активные карточки после совпадения
+        // ОЧИЩАЕМ активные карточки
         activeCards = [];
         canFlip = true;
 
@@ -130,11 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleMismatch(card1, card2) {
         showMessage('Попробуй снова', `"${card1.dataset.text}" и "${card2.dataset.text}" не являются парой`);
         
-        // ВАЖНО: Очищаем активные карточки, но оставляем их перевернутыми
+        // ОЧИЩАЕМ активные карточки, но оставляем их перевернутыми
         activeCards = [];
         canFlip = true;
-        
-        // Карточки остаются перевернутыми (видимыми), но больше не мешают новым кликам
     }
 
     // Показать сообщение
@@ -144,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageModal.style.display = 'block';
     }
 
-    // Показать сообщение о победы
+    // Показать сообщение о победе
     function showWinMessage() {
         winModal.style.display = 'block';
     }
