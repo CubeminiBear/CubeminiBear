@@ -1,4 +1,45 @@
+// Пароль для доступа к игре
+const GAME_PASSWORD = "1234";
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Проверка пароля
+    const passwordModal = document.getElementById('password-modal');
+    const passwordInput = document.getElementById('password-input');
+    const passwordSubmit = document.getElementById('password-submit');
+    const passwordError = document.getElementById('password-error');
+    const container = document.querySelector('.container');
+
+    function checkPassword() {
+        const enteredPassword = passwordInput.value.trim();
+        
+        if (enteredPassword === GAME_PASSWORD) {
+            passwordModal.style.display = 'none';
+            container.style.display = 'block';
+            // После ввода пароля запускаем вашу существующую игру
+            startExistingGame();
+        } else {
+            passwordError.style.display = 'block';
+            passwordInput.value = '';
+            passwordInput.focus();
+        }
+    }
+
+    passwordSubmit.addEventListener('click', checkPassword);
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkPassword();
+    });
+    passwordInput.focus();
+
+    // Ваш существующий код игры - ПЕРЕИМЕНОВАТЬ функцию
+    function startExistingGame() {
+        // ВАШ СУЩЕСТВУЮЩИЙ КОД ИГРЫ СКОПИРОВАТЬ СЮДА ЦЕЛИКОМ
+        // (весь тот код что у вас был в DOMContentLoaded)
+        
+        const gameBoard = document.getElementById('game-board');
+        const pairsFoundElement = document.getElementById('pairs-found');
+        // ... и весь остальной ваш код
+        
+        document.addEventListener('DOMContentLoaded', () => {
     const gameBoard = document.getElementById('game-board');
     const pairsFoundElement = document.getElementById('pairs-found');
     const messageModal = document.getElementById('message-modal');
